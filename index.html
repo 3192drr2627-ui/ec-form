@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Executive Council - Rotaract 3192 | RY 2026-27 Application Form</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+
+<form id="form" class="max-w-xl mx-auto bg-white p-6 mt-10 rounded-lg shadow">
+
+<!-- STEP 1 -->
+<div class="step">
+<input required placeholder="Email ID" id="email" class="input"/>
+<input required placeholder="Full Name (as per Govt ID)" id="fullName" class="input"/>
+<input required placeholder="Contact Number" id="contact" class="input"/>
+<textarea placeholder="Residential Address" id="address" class="input"></textarea>
+<input placeholder="DD/MM/YYYY" id="dob" class="input"/>
+<input placeholder="Hobbies / Passion" id="hobbies" class="input"/>
+<input placeholder="Rotary International ID" id="riId" class="input"/>
+<select id="clubType" class="input">
+<option>Community Based</option>
+<option>Institution Based</option>
+</select>
+<input placeholder="Current Club Name" id="currentClub" class="input"/>
+<input placeholder="Year of Joining Rotaract" id="joinYear" class="input"/>
+<button type="button" onclick="next()">Next</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step hidden">
+<textarea placeholder="Past Responsibilities" id="pastRoles" class="input"></textarea>
+<textarea placeholder="Key Contributions" id="achievements" class="input"></textarea>
+<button type="button" onclick="prev()">Back</button>
+<button type="button" onclick="next()">Next</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="step hidden">
+<select id="primaryRole" class="input"><option>Director</option></select>
+<textarea id="primaryWhy" class="input" placeholder="Why Primary Role"></textarea>
+<select id="secondaryRole" class="input"><option>Co-Director</option></select>
+<textarea id="secondaryWhy" class="input" placeholder="Why Secondary Role"></textarea>
+<button type="button" onclick="prev()">Back</button>
+<button type="button" onclick="next()">Next</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="step hidden">
+<textarea id="districtWhy" class="input" placeholder="Why District Level?"></textarea>
+<textarea id="strengths" class="input" placeholder="Key Strengths"></textarea>
+<input id="time" class="input" placeholder="Hours per week"/>
+<button type="button" onclick="prev()">Back</button>
+<button type="submit">Submit</button>
+</div>
+
+</form>
+
+<script>
+let current = 0;
+const steps = document.querySelectorAll(".step");
+
+function show(i){
+  steps.forEach(s=>s.classList.add("hidden"));
+  steps[i].classList.remove("hidden");
+}
+function next(){ show(++current); }
+function prev(){ show(--current); }
+
+document.getElementById("form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const data = Object.fromEntries(
+    [...document.querySelectorAll("input,textarea,select")]
+    .map(el=>[el.id, el.value])
+  );
+
+  await fetch("/.netlify/functions/submitForm",{
+    method:"POST",
+    body:JSON.stringify(data)
+  });
+
+  alert("Submitted Successfully");
+});
+</script>
+
+<style>
+.input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:6px}
+</style>
+
+</body>
+</html>
